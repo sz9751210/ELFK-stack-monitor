@@ -1,0 +1,31 @@
+filebeat.config.inputs:
+  enabled: true
+  path: /usr/share/filebeat/filebeat.yml
+  reload.enabled: true
+  reload.period: 10s
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  fields:
+    source: durian.json.access
+    app: durian
+    nginx: true
+    log_type: access
+  paths:
+    - /var/log/test/*
+
+output.logstash:
+  hosts: ["localhost:5044"]
+
+
+# output.elasticsearch:
+#   hosts: ["ip:port"]
+#   protocol: "https"
+#   username: "filebeat" 
+#   password: "filebeat"
+#   ssl.certificate_authorities:  ["/etc/filebeat/cert/elk.crt"]
+#   indices:
+#     - index: "%{[fields.app]}.nginx.%{[fields.log_type]}"
+#       when.equals:
+#         fields.nginx: true

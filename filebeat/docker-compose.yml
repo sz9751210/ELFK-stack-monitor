@@ -1,0 +1,113 @@
+
+version: "3"
+services:
+  #filebeat-1:
+  #  image: elastic/filebeat:8.2.2
+  #  # build:
+  #  #   context: .
+  #  #   dockerfile: Dockerfile-filebeat
+  #  restart: "always"
+  #  privileged: true
+  #  user: root
+  #  container_name: filebeat-1
+  #  volumes:
+  #    - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+  #    - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+  #    - ./fake:/var/log/test
+  #  network_mode: host  
+
+   filebeat-1:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-1
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-2:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-2
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-3:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-3
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-4:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-4
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-5:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-5
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-6:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-6
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-7:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-7
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
+
+   filebeat-8:
+     image: elastic/filebeat:7.10.1
+     restart: "always"
+     privileged: true
+     user: root
+     container_name: filebeat-8
+     volumes:
+       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+       - ./config/http_ca.crt:/etc/filebeat/cert/http_ca.crt
+       - ./fake3:/var/log/test
+     network_mode: host  
