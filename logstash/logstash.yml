@@ -1,0 +1,9 @@
+http.host: "0.0.0.0"
+xpack.monitoring.elasticsearch.hosts: ["https://elasticsearch:9200"]
+config.reload.automatic: true
+config.debug: true
+log.level: info
+path.logs: /usr/share/logstash/data/logs
+pipeline.separate_logs: true
+path.data: /usr/share/logstash/data
+

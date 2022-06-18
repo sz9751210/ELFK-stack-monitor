@@ -1,0 +1,19 @@
+filebeat.config.inputs:
+  enabled: true
+  path: /usr/share/filebeat/filebeat.yml
+  reload.enabled: true
+  reload.period: 10s
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  fields:
+    source: fake.mtfk.access
+    app: fake
+    mtfk: true
+    log_type: access
+  paths:
+    - /fake-data/*
+
+output.logstash:
+  hosts: ["logstash:5044"]

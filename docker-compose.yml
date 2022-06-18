@@ -1,0 +1,151 @@
+version: "3.6"
+services:
+  ## elk-stack
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    container_name: elasticsearch
+    restart: always
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      ES_JAVA_OPTS: -Xms256m -Xmx256m
+    volumes:
+      - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - elasticsearch_data:/usr/share/elasticsearch/data:z
+    networks:
+      - elk-net
+
+  elasticsearch_exporter:
+    image: bitnami/elasticsearch-exporter:latest
+    container_name: elasticsearch_exporter
+    restart: always
+    command:
+      - '--es.uri=http://@elasticsearch:9200'
+      - '--es.all'
+      - '--es.cluster_settings'
+      - '--es.indices'
+      - '--es.indices_settings'
+      - '--es.shards'
+    ports:
+      - 9114:9114
+    networks:
+      - elk-net
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.13.2
+    container_name: kibana
+    restart: always
+    privileged: true
+    ports:
+      - 5601:5601
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    networks:
+      - elk-net
+    depends_on:
+      - elasticsearch
+
+  alpine:
+    build: alpine/.
+    container_name: alpine
+    volumes:
+      - ./filebeat/fake-data/:/fake-data/
+    command: bash -c "/fake-data/fake.sh"
+    depends_on:
+      - filebeat
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.13.2
+    container_name: filebeat
+    restart: always
+    privileged: true
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./filebeat/fake-data/:/fake-data/
+    networks:
+      - elk-net
+    depends_on:
+      - logstash
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.2
+    container_name: logstash
+    restart: always
+    privileged: true
+    user: root
+    ports:
+      - 5044:5044
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+    volumes:
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    networks:
+      - elk-net
+    depends_on:
+      - elasticsearch
+
+  metricbeat:
+    build: metricbeat/.
+    container_name: metricbeat
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    volumes:
+      - metricbeat-data01:/usr/share/metricbeat/data
+    networks:
+      - elk-net
+    depends_on:
+      - elasticsearch
+
+  ## monitor
+  cadvisor:
+    image: 'google/cadvisor:latest'
+    container_name: cadvisor
+    ports:
+      - '8080:8080'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk:/dev/disk/:ro
+    networks:
+      - elk-net
+
+  prometheus:
+    image: 'prom/prometheus:latest'
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - elk-net
+
+  grafana:
+    image: grafana/grafana:7.5.4
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+    networks:
+      - elk-net
+
+networks:
+  elk-net:
+
+
+volumes:
+  elasticsearch_data: {}
+  grafana_data: {}
+  metricbeat-data01: {}
