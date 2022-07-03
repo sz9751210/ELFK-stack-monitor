@@ -15,13 +15,19 @@ sudo docker-compose up -d
 ![](./assets/4.png)
 ![](./assets/5.png)
 ![](./assets/6.png)
+![](./assets/7.png)
 
 3. 可進到` localhost:3000 `查看grafana dashboard，帳密都為admin
-![](./assets/7.png)
 ![](./assets/8.png)
+![](./assets/9.png)
+![](./assets/10.png)
+- container-dashboard
+![](./assets/11.png)
+- elasticsearch-dashboard
+![](./assets/12.png)
 
 ## 預計添加功能
 
-- [ ] 新增filter
+- [ ] 新增log filter
 - [ ] 添加ssl
 - [ ] cluster架構的elastic
