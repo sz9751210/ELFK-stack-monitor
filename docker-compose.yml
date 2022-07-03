@@ -1,6 +1,6 @@
 version: "3.6"
 services:
-  ## elk-stack
+  # elk-stack
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
     container_name: elasticsearch
@@ -15,24 +15,6 @@ services:
       - elasticsearch_data:/usr/share/elasticsearch/data:z
     networks:
       - elk-net
-
-  elasticsearch_exporter:
-    image: bitnami/elasticsearch-exporter:latest
-    container_name: elasticsearch_exporter
-    restart: always
-    command:
-      - '--es.uri=http://@elasticsearch:9200'
-      - '--es.all'
-      - '--es.cluster_settings'
-      - '--es.indices'
-      - '--es.indices_settings'
-      - '--es.shards'
-    ports:
-      - 9114:9114
-    networks:
-      - elk-net
-    depends_on:
-      - elasticsearch
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.13.2
@@ -58,13 +40,14 @@ services:
       - filebeat
 
   filebeat:
-    image: docker.elastic.co/beats/filebeat:7.13.2
+    # image: docker.elastic.co/beats/filebeat:7.13.2
+    build: filebeat/.
     container_name: filebeat
     restart: always
     privileged: true
     user: root
     volumes:
-      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      # - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/fake-data/:/fake-data/
     networks:
       - elk-net
@@ -102,7 +85,7 @@ services:
     depends_on:
       - elasticsearch
 
-  ## monitor
+  # monitor
   cadvisor:
     image: 'google/cadvisor:latest'
     container_name: cadvisor
@@ -116,6 +99,24 @@ services:
       - /dev/disk:/dev/disk/:ro
     networks:
       - elk-net
+
+  elasticsearch_exporter:
+    image: bitnami/elasticsearch-exporter:latest
+    container_name: elasticsearch_exporter
+    restart: always
+    command:
+      - '--es.uri=http://@elasticsearch:9200'
+      - '--es.all'
+      - '--es.cluster_settings'
+      - '--es.indices'
+      - '--es.indices_settings'
+      - '--es.shards'
+    ports:
+      - 9114:9114
+    networks:
+      - elk-net
+    depends_on:
+      - elasticsearch
 
   prometheus:
     image: 'prom/prometheus:latest'

@@ -5,6 +5,6 @@ do
     for i in {1..1000}
     do
         echo "hello MDFK~~" >> /fake-data/hello.log
-        sleep 1s
+        # sleep 1s
     done
 done
