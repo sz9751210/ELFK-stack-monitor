@@ -1,7 +1,11 @@
 # ELFK-stack-monitor
-## 簡介
-- ELFK-stack : alpine+filebeat(送資料) -> logstash(filter) -> elasticsearch(db) -> kibana(ui)
-- Monitor : elasticsearch_exporter,metricbeat(monitor) -> prometheus(db) -> grafana(ui)
+## 👨‍💻簡介
+- 🔰ELFK-stack：因最近在研究elk-stack，藉此紀錄一下使用docker-compose建立起elk-stack的架構，主要先從alpine產生假資料並存到filebeat讀取的資料夾，接著filebeat將資料送往logstash，在實務上，會在logstash做filter的功能(未來會新增)，接著送到elasticsearch存起來，並透過kibana的ui下去做搜尋所需的log資料。
+- 🔰Monitor：使用cadvisor監控所有容器以及elasticsearch_exporter監控elasticsearch的狀態，並把資料送到prometheus儲存起來，最後透過grafana的ui呈現。
+
+### 流程
+- ⚙️ELFK-stack : alpine+filebeat(送資料) -> logstash(filter) -> elasticsearch(db) -> kibana(ui)
+- ⚙️Monitor : cadvisor,elasticsearch_exporter(monitor) -> prometheus(db) -> grafana(ui)
 
 ## 環境建置
 1. 使用docker-compose啟動服務

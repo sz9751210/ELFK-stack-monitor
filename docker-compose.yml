@@ -1,5 +1,6 @@
 version: "3.6"
 services:
+
   # elk-stack
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
@@ -40,14 +41,12 @@ services:
       - filebeat
 
   filebeat:
-    # image: docker.elastic.co/beats/filebeat:7.13.2
     build: filebeat/.
     container_name: filebeat
     restart: always
     privileged: true
     user: root
     volumes:
-      # - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/fake-data/:/fake-data/
     networks:
       - elk-net
@@ -68,18 +67,6 @@ services:
     volumes:
       - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    networks:
-      - elk-net
-    depends_on:
-      - elasticsearch
-
-  metricbeat:
-    build: metricbeat/.
-    container_name: metricbeat
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-    volumes:
-      - metricbeat-data01:/usr/share/metricbeat/data
     networks:
       - elk-net
     depends_on:
@@ -149,4 +136,3 @@ networks:
 volumes:
   elasticsearch_data: {}
   grafana_data: {}
-  metricbeat-data01: {}
